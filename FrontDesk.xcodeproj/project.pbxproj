@@ -6,20 +6,79 @@
 	objectVersion = 77;
 	objects = {
 
+<<<<<<< HEAD
 /* Begin PBXFileReference section */
 		0ABF6B9B2CDB0EAC00F20622 /* FrontDesk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontDesk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0ABF6B9D2CDB0EAC00F20622 /* FrontDesk */ = {
+=======
+/* Begin PBXContainerItemProxy section */
+		42AF743D2CDAB80300C0363D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42AF74222CDAB80200C0363D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42AF74292CDAB80200C0363D;
+			remoteInfo = FrontDesk;
+		};
+		42AF74472CDAB80300C0363D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42AF74222CDAB80200C0363D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42AF74292CDAB80200C0363D;
+			remoteInfo = FrontDesk;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		42AF742A2CDAB80200C0363D /* FrontDesk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FrontDesk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42AF743C2CDAB80300C0363D /* FrontDeskTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrontDeskTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		42AF74462CDAB80300C0363D /* FrontDeskUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FrontDeskUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		42AF742C2CDAB80200C0363D /* FrontDesk */ = {
+>>>>>>> origin/Junyuan
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = FrontDesk;
+			sourceTree = "<group>";
+		};
+<<<<<<< HEAD
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0ABF6B982CDB0EAC00F20622 /* Frameworks */ = {
+=======
+		42AF743F2CDAB80300C0363D /* FrontDeskTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FrontDeskTests;
+			sourceTree = "<group>";
+		};
+		42AF74492CDAB80300C0363D /* FrontDeskUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FrontDeskUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0ABF6B982CDB0EAC00F20622 /* Frameworks */ = {
+		42AF74272CDAB80200C0363D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42AF74392CDAB80300C0363D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42AF74432CDAB80300C0363D /* Frameworks */ = {
+>>>>>>> origin/Junyuan
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -29,6 +88,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+<<<<<<< HEAD
 		0ABF6B922CDB0EAC00F20622 = {
 			isa = PBXGroup;
 			children = (
@@ -41,6 +101,24 @@
 			isa = PBXGroup;
 			children = (
 				0ABF6B9B2CDB0EAC00F20622 /* FrontDesk.app */,
+=======
+		42AF74212CDAB80200C0363D = {
+			isa = PBXGroup;
+			children = (
+				42AF742C2CDAB80200C0363D /* FrontDesk */,
+				42AF743F2CDAB80300C0363D /* FrontDeskTests */,
+				42AF74492CDAB80300C0363D /* FrontDeskUITests */,
+				42AF742B2CDAB80200C0363D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		42AF742B2CDAB80200C0363D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				42AF742A2CDAB80200C0363D /* FrontDesk.app */,
+				42AF743C2CDAB80300C0363D /* FrontDeskTests.xctest */,
+				42AF74462CDAB80300C0363D /* FrontDeskUITests.xctest */,
+>>>>>>> origin/Junyuan
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +126,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+<<<<<<< HEAD
 		0ABF6B9A2CDB0EAC00F20622 /* FrontDesk */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0ABF6BAB2CDB0EAF00F20622 /* Build configuration list for PBXNativeTarget "FrontDesk" */;
@@ -55,18 +134,32 @@
 				0ABF6B972CDB0EAC00F20622 /* Sources */,
 				0ABF6B982CDB0EAC00F20622 /* Frameworks */,
 				0ABF6B992CDB0EAC00F20622 /* Resources */,
+=======
+		42AF74292CDAB80200C0363D /* FrontDesk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42AF74502CDAB80300C0363D /* Build configuration list for PBXNativeTarget "FrontDesk" */;
+			buildPhases = (
+				42AF74262CDAB80200C0363D /* Sources */,
+				42AF74272CDAB80200C0363D /* Frameworks */,
+				42AF74282CDAB80200C0363D /* Resources */,
+>>>>>>> origin/Junyuan
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+<<<<<<< HEAD
 				0ABF6B9D2CDB0EAC00F20622 /* FrontDesk */,
+=======
+				42AF742C2CDAB80200C0363D /* FrontDesk */,
+>>>>>>> origin/Junyuan
 			);
 			name = FrontDesk;
 			packageProductDependencies = (
 			);
 			productName = FrontDesk;
+<<<<<<< HEAD
 			productReference = 0ABF6B9B2CDB0EAC00F20622 /* FrontDesk.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -74,24 +167,97 @@
 
 /* Begin PBXProject section */
 		0ABF6B932CDB0EAC00F20622 /* Project object */ = {
+=======
+			productReference = 42AF742A2CDAB80200C0363D /* FrontDesk.app */;
+			productType = "com.apple.product-type.application";
+		};
+		42AF743B2CDAB80300C0363D /* FrontDeskTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42AF74532CDAB80300C0363D /* Build configuration list for PBXNativeTarget "FrontDeskTests" */;
+			buildPhases = (
+				42AF74382CDAB80300C0363D /* Sources */,
+				42AF74392CDAB80300C0363D /* Frameworks */,
+				42AF743A2CDAB80300C0363D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42AF743E2CDAB80300C0363D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				42AF743F2CDAB80300C0363D /* FrontDeskTests */,
+			);
+			name = FrontDeskTests;
+			packageProductDependencies = (
+			);
+			productName = FrontDeskTests;
+			productReference = 42AF743C2CDAB80300C0363D /* FrontDeskTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		42AF74452CDAB80300C0363D /* FrontDeskUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 42AF74562CDAB80300C0363D /* Build configuration list for PBXNativeTarget "FrontDeskUITests" */;
+			buildPhases = (
+				42AF74422CDAB80300C0363D /* Sources */,
+				42AF74432CDAB80300C0363D /* Frameworks */,
+				42AF74442CDAB80300C0363D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				42AF74482CDAB80300C0363D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				42AF74492CDAB80300C0363D /* FrontDeskUITests */,
+			);
+			name = FrontDeskUITests;
+			packageProductDependencies = (
+			);
+			productName = FrontDeskUITests;
+			productReference = 42AF74462CDAB80300C0363D /* FrontDeskUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		42AF74222CDAB80200C0363D /* Project object */ = {
+>>>>>>> origin/Junyuan
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+<<<<<<< HEAD
 					0ABF6B9A2CDB0EAC00F20622 = {
 						CreatedOnToolsVersion = 16.0;
 					};
 				};
 			};
 			buildConfigurationList = 0ABF6B962CDB0EAC00F20622 /* Build configuration list for PBXProject "FrontDesk" */;
+=======
+					42AF74292CDAB80200C0363D = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					42AF743B2CDAB80300C0363D = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 42AF74292CDAB80200C0363D;
+					};
+					42AF74452CDAB80300C0363D = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 42AF74292CDAB80200C0363D;
+					};
+				};
+			};
+			buildConfigurationList = 42AF74252CDAB80200C0363D /* Build configuration list for PBXProject "FrontDesk" */;
+>>>>>>> origin/Junyuan
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
+<<<<<<< HEAD
 			mainGroup = 0ABF6B922CDB0EAC00F20622;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
@@ -100,12 +266,42 @@
 			projectRoot = "";
 			targets = (
 				0ABF6B9A2CDB0EAC00F20622 /* FrontDesk */,
+=======
+			mainGroup = 42AF74212CDAB80200C0363D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 42AF742B2CDAB80200C0363D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				42AF74292CDAB80200C0363D /* FrontDesk */,
+				42AF743B2CDAB80300C0363D /* FrontDeskTests */,
+				42AF74452CDAB80300C0363D /* FrontDeskUITests */,
+>>>>>>> origin/Junyuan
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+<<<<<<< HEAD
 		0ABF6B992CDB0EAC00F20622 /* Resources */ = {
+=======
+		42AF74282CDAB80200C0363D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42AF743A2CDAB80300C0363D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42AF74442CDAB80300C0363D /* Resources */ = {
+>>>>>>> origin/Junyuan
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,7 +311,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+<<<<<<< HEAD
 		0ABF6B972CDB0EAC00F20622 /* Sources */ = {
+=======
+		42AF74262CDAB80200C0363D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42AF74382CDAB80300C0363D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42AF74422CDAB80300C0363D /* Sources */ = {
+>>>>>>> origin/Junyuan
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -124,8 +338,26 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+<<<<<<< HEAD
 /* Begin XCBuildConfiguration section */
 		0ABF6BA92CDB0EAF00F20622 /* Debug */ = {
+=======
+/* Begin PBXTargetDependency section */
+		42AF743E2CDAB80300C0363D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42AF74292CDAB80200C0363D /* FrontDesk */;
+			targetProxy = 42AF743D2CDAB80300C0363D /* PBXContainerItemProxy */;
+		};
+		42AF74482CDAB80300C0363D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42AF74292CDAB80200C0363D /* FrontDesk */;
+			targetProxy = 42AF74472CDAB80300C0363D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		42AF744E2CDAB80300C0363D /* Debug */ = {
+>>>>>>> origin/Junyuan
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -188,7 +420,11 @@
 			};
 			name = Debug;
 		};
+<<<<<<< HEAD
 		0ABF6BAA2CDB0EAF00F20622 /* Release */ = {
+=======
+		42AF744F2CDAB80300C0363D /* Release */ = {
+>>>>>>> origin/Junyuan
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -244,7 +480,11 @@
 			};
 			name = Release;
 		};
+<<<<<<< HEAD
 		0ABF6BAC2CDB0EAF00F20622 /* Debug */ = {
+=======
+		42AF74512CDAB80300C0363D /* Debug */ = {
+>>>>>>> origin/Junyuan
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -264,7 +504,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.zz391.FrontDesk;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.jd572.FrontDesk;
+>>>>>>> origin/Junyuan
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -272,7 +516,11 @@
 			};
 			name = Debug;
 		};
+<<<<<<< HEAD
 		0ABF6BAD2CDB0EAF00F20622 /* Release */ = {
+=======
+		42AF74522CDAB80300C0363D /* Release */ = {
+>>>>>>> origin/Junyuan
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -292,7 +540,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.zz391.FrontDesk;
+=======
+				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.jd572.FrontDesk;
+>>>>>>> origin/Junyuan
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -300,6 +552,7 @@
 			};
 			name = Release;
 		};
+<<<<<<< HEAD
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -308,20 +561,128 @@
 			buildConfigurations = (
 				0ABF6BA92CDB0EAF00F20622 /* Debug */,
 				0ABF6BAA2CDB0EAF00F20622 /* Release */,
+=======
+		42AF74542CDAB80300C0363D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.jd572.FrontDeskTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FrontDesk.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FrontDesk";
+			};
+			name = Debug;
+		};
+		42AF74552CDAB80300C0363D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.jd572.FrontDeskTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FrontDesk.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FrontDesk";
+			};
+			name = Release;
+		};
+		42AF74572CDAB80300C0363D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.jd572.FrontDeskUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FrontDesk;
+			};
+			name = Debug;
+		};
+		42AF74582CDAB80300C0363D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.jd572.FrontDeskUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FrontDesk;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		42AF74252CDAB80200C0363D /* Build configuration list for PBXProject "FrontDesk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42AF744E2CDAB80300C0363D /* Debug */,
+				42AF744F2CDAB80300C0363D /* Release */,
+>>>>>>> origin/Junyuan
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+<<<<<<< HEAD
 		0ABF6BAB2CDB0EAF00F20622 /* Build configuration list for PBXNativeTarget "FrontDesk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0ABF6BAC2CDB0EAF00F20622 /* Debug */,
 				0ABF6BAD2CDB0EAF00F20622 /* Release */,
+=======
+		42AF74502CDAB80300C0363D /* Build configuration list for PBXNativeTarget "FrontDesk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42AF74512CDAB80300C0363D /* Debug */,
+				42AF74522CDAB80300C0363D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42AF74532CDAB80300C0363D /* Build configuration list for PBXNativeTarget "FrontDeskTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42AF74542CDAB80300C0363D /* Debug */,
+				42AF74552CDAB80300C0363D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		42AF74562CDAB80300C0363D /* Build configuration list for PBXNativeTarget "FrontDeskUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				42AF74572CDAB80300C0363D /* Debug */,
+				42AF74582CDAB80300C0363D /* Release */,
+>>>>>>> origin/Junyuan
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
+<<<<<<< HEAD
 	rootObject = 0ABF6B932CDB0EAC00F20622 /* Project object */;
+=======
+	rootObject = 42AF74222CDAB80200C0363D /* Project object */;
+>>>>>>> origin/Junyuan
 }
