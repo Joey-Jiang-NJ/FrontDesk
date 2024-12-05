@@ -16,6 +16,8 @@ let samplePreferences = [
     PreferenceOption(title: "Preop Assessment", options: ["Comprehensive Presentation", "Pertinent Positives and Negatives Only"])
 ]
 
+let encoder = JSONEncoder()
+let decoder = JSONDecoder()
 
 
 

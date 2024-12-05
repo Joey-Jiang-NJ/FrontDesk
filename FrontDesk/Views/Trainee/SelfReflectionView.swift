@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct SelfReflectionView: View {
-    @State private var indication: String = ""
-    @State private var reviewed: Bool? = nil
-    @State private var facultyFeedback: [String] = ["", ""]
-    @State private var learnerFeedback: [String] = ["", ""]
-    @State private var keySteps: [String] = ["Step 1", "Step 2", "Step 3"]
-    @State private var editingIndex: Int? = nil
-    @State private var editedText: String = ""
-    @State private var selectedProcedureLevel: String? = nil // Track selected procedure level
-
+    @EnvironmentObject var trainee: Trainee
+    @ObservedObject var caseLog: CaseLog
+    
+    @State var selfRef: SelfReflection = SelfReflection()
+    
+    @Binding var showself_reflection: Bool
+    
     let procedureLevels = ["N", "AN", "A", "C", "E"]
 
     var body: some View {
@@ -32,21 +30,23 @@ struct SelfReflectionView: View {
 
                 VStack(alignment: .leading) {
                     Text("Indication").font(.headline)
-                    TextField("Enter indication here", text: $indication)
+                    TextField("Enter indication here", text: $selfRef.indication)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
                 // Procedure Key Steps Section
                 VStack(alignment: .leading) {
                     Text("Procedure Key Steps").font(.headline)
-                    ForEach(Array(keySteps.enumerated()), id: \.offset) { index, step in
+                    // MARK: We learned how to use dictionary in forEach  from gpt
+                    ForEach(Array(selfRef.keySteps.enumerated()), id: \.offset) { index, step in
                         VStack {
-                            if editingIndex == index {
+                            if selfRef.editingIndex == index {
                                 VStack {
-                                    TextField("Edit step", text: $editedText)
+                                    TextField("Edit step", text: $selfRef.editedText)
                                         .textFieldStyle(RoundedBorderTextFieldStyle())
                                 }
                                 HStack {
+                                    // call the save edit function when you click the save button
                                     Button(action: {
                                         saveEdit(at: index)
                                     }) {
@@ -56,6 +56,7 @@ struct SelfReflectionView: View {
                                             .foregroundColor(.white)
                                             .cornerRadius(7)
                                     }
+                                    // similarly, call cancelEdit when you click cancel button
                                     Button(action: {
                                         cancelEdit()
                                     }) {
@@ -107,7 +108,7 @@ struct SelfReflectionView: View {
                     .padding()
                     .background(Color.black.opacity(0.7))
                     .cornerRadius(10)
-
+                    // add new step when you click add button
                     Button(action: {
                         addNewStep()
                     }) {
@@ -130,14 +131,14 @@ struct SelfReflectionView: View {
                     HStack {
                         ForEach(procedureLevels, id: \.self) { level in
                             Button(action: {
-                                selectedProcedureLevel = level
+                                selfRef.selectedProcedureLevel = level
                             }) {
                                 Text(level)
                                     .font(.title3)
                                     .fontWeight(.bold)
                                     .frame(width: 50, height: 50)
                                     .background(
-                                        selectedProcedureLevel == level ? Color.blue : Color.gray.opacity(0.3)
+                                        selfRef.selectedProcedureLevel == level ? Color.blue : Color.gray.opacity(0.3)
                                     )
                                     .foregroundColor(.white)
                                     .cornerRadius(8)
@@ -152,18 +153,20 @@ struct SelfReflectionView: View {
                         .font(.headline)
                     HStack {
                         Button("Yes") {
-                            reviewed = true
+                            selfRef.reviewed = true // when the user clicked YES buttton, set reviewed to yes
                         }
                         .padding()
-                        .background(reviewed == true ? Color.blue : Color.gray.opacity(0.5))
+                        // change the color of the button when the user click it
+                        .background(selfRef.reviewed == true ? Color.blue : Color.gray.opacity(0.5))
                         .foregroundColor(.white)
                         .cornerRadius(8)
 
                         Button("No") {
-                            reviewed = false
+                            selfRef.reviewed = false// when the user clicked NO buttton, set reviewed to NO
                         }
                         .padding()
-                        .background(reviewed == false ? Color.red : Color.gray.opacity(0.5))
+                        // change the color of the button when the user click it
+                        .background(selfRef.reviewed == false ? Color.red : Color.gray.opacity(0.5))
                         .foregroundColor(.white)
                         .cornerRadius(8)
                     }
@@ -172,24 +175,27 @@ struct SelfReflectionView: View {
                 // Faculty and Learner Feedback Section
                 VStack(alignment: .leading) {
                     Text("Faculty Sally: What went well?").font(.headline)
-                    TextField("Enter indication here", text: $facultyFeedback[0])
+                    TextField("Enter feedback here", text: $selfRef.facultyFeedback[0])
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     Text("Faculty Sally: What can be improved?").font(.headline)
-                    TextField("Enter indication here", text: $facultyFeedback[1])
+                    TextField("Enter feedback here", text: $selfRef.facultyFeedback[1])
                         .textFieldStyle(RoundedBorderTextFieldStyle())
 
                     Text("Learner Jim: What went well?").font(.headline)
-                    TextField("Enter indication here", text: $learnerFeedback[0])
+                    TextField("Enter feedback here", text: $selfRef.learnerFeedback[0])
                         .textFieldStyle(RoundedBorderTextFieldStyle())
 
                     Text("Learner Jim: What can be improved?").font(.headline)
-                    TextField("Enter indication here", text: $learnerFeedback[1])
+                    TextField("Enter feedback here", text: $selfRef.learnerFeedback[1])
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
                 // Save Button
                 Button(action: {
                     // Save self-reflection here
+                    caseLog.selfRef = selfRef
+                    _ = trainee.saveToArchCL()
+                    showself_reflection = false
                 }) {
                     HStack {
                         Image(systemName: "plus")
@@ -206,38 +212,35 @@ struct SelfReflectionView: View {
         }
     }
 
-    // MARK: - Action Functions
+    //  Action Functions
     func startEdit(at index: Int) {
-        editingIndex = index
-        editedText = keySteps[index]
+        selfRef.editingIndex = index
+        selfRef.editedText = selfRef.keySteps[index]
     }
 
     func saveEdit(at index: Int) {
-        keySteps[index] = editedText
+        selfRef.keySteps[index] = selfRef.editedText
         cancelEdit()
     }
 
     func cancelEdit() {
-        editingIndex = nil
-        editedText = ""
+        selfRef.editingIndex = nil
+        selfRef.editedText = ""
     }
-
+    // MARK: - we learned this function from gpt
     func moveStep(at index: Int) {
         guard index > 0 else { return }
-        let step = keySteps.remove(at: index)
-        keySteps.insert(step, at: 0)
+        let step = selfRef.keySteps.remove(at: index)
+        selfRef.keySteps.insert(step, at: 0)
     }
+    // MARK: END
 
     func deleteStep(at index: Int) {
-        keySteps.remove(at: index)
+        selfRef.keySteps.remove(at: index)
     }
 
     func addNewStep() {
-        let newStepNumber = keySteps.count + 1
-        keySteps.append("Step \(newStepNumber)")
+        let newStepNumber = selfRef.keySteps.count + 1
+        selfRef.keySteps.append("Step \(newStepNumber)")
     }
-}
-
-#Preview {
-    SelfReflectionView()
 }

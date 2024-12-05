@@ -27,7 +27,7 @@ struct TraineeListF: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .padding(.top)
-                    .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 3)
+                    .shadow(color: .black.opacity(0.3), radius: 5)
 
                 // Trainee List
                 ScrollView {
@@ -36,13 +36,16 @@ struct TraineeListF: View {
                             NavigationLink(destination: TraineeViewF().environmentObject(trainee)) {
                                 TraineeCardViewF(trainee: trainee)
                             }
-                            .buttonStyle(PlainButtonStyle()) // Remove default NavigationLink styling
+                        
                         }
                     }
                     .padding(.horizontal)
                 }
                 .padding(.top, 10)
             }
+        }
+        .onAppear {
+            getRelatedTrainees(faculty.caseID)
         }
     }
 }
@@ -53,56 +56,20 @@ struct TraineeCardViewF: View {
     var body: some View {
         HStack(spacing: 15) {
             // Trainee Image
-            if trainee.traineeID.lowercased() == "076eee0e-04bf-413a-8dc1-5a52ed8ee7b7" {
-                Image("head")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                    .shadow(radius: 3)
-            } else if trainee.firstName == "Sarah" {
-                Image("head1")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                    .shadow(radius: 3)
-            } else if trainee.firstName == "Michael" {
-                Image("head2")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                    .shadow(radius: 3)
-            } else if trainee.firstName == "Emily" {
-                Image("head3")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                    .shadow(radius: 3)
-            } else if trainee.lastName == "Brown" {
-                Image("head4")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                    .shadow(radius: 3)
-                    .frame(width: 80, height: 80)
-            }
-            else {
+            if !trainee.picture.isEmpty {
                 Image(uiImage: imageFromString(trainee.picture))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 50, height: 50)
                     .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                    .shadow(radius: 3)
+                    .overlay(Circle().stroke(Color.gray))
+            } else {
+                Image("Elaina")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray))
             }
             
 //                Image(uiImage: imageFromString(trainee.picture))
@@ -112,7 +79,6 @@ struct TraineeCardViewF: View {
 //                    .clipShape(Circle())
 //                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
 //                    .shadow(radius: 3)
-          
 
             // Trainee Details
             VStack(alignment: .leading, spacing: 5) {
@@ -143,14 +109,14 @@ struct TraineeCardViewF: View {
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.white.opacity(0.9))
-                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+                .shadow(color: Color.black.opacity(0.1), radius: 5)
         )
         .padding(.horizontal, 5)
     }
 }
 
-#Preview {
-    TraineeList()
-        .environmentObject(ScheduleData())
-}
+//#Preview {
+//    TraineeList()
+//        .environmentObject(ScheduleData())
+//}
 

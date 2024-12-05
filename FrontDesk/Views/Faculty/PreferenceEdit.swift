@@ -46,7 +46,7 @@ struct PreferenceEdit: View {
                     )
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.top, 20)
-                    .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
+                    .shadow(color: Color.black.opacity(0.2), radius: 5)
 
                 ScrollView {
                     ForEach(faculty.preferences.keys.sorted(), id: \.self) { key in
@@ -54,11 +54,12 @@ struct PreferenceEdit: View {
                             Text(key)
                                 .font(.headline)
                                 .foregroundColor(.primary)
-
+                            // MARK: Begin - from chatgpt
                             TextField("Enter \(key.lowercased()) details...", text: Binding(
                                 get: { faculty.preferences[key] ?? "" },
                                 set: { faculty.preferences[key] = $0 }
                             ))
+                            // MARK: End
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.vertical, 5)
                         }
@@ -66,7 +67,7 @@ struct PreferenceEdit: View {
                         .background(
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(Color.white.opacity(0.9))
-                                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+                                .shadow(color: Color.black.opacity(0.1), radius: 5)
                         )
                         .padding(.horizontal)
                     }
@@ -87,7 +88,7 @@ struct PreferenceEdit: View {
                             )
                         )
                         .cornerRadius(10)
-                        .shadow(color: Color.blue.opacity(0.4), radius: 5, x: 0, y: 3)
+                        .shadow(color: Color.blue.opacity(0.4), radius: 5)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 20)
@@ -97,9 +98,9 @@ struct PreferenceEdit: View {
 
     func savePreferences() {
         // Logic to save entered preferences
-        var f_ = Faculty_(id: UUID(uuidString: Faculty.defaultFaculty.id), firstName: "Dr. Emily", lastName: "Clark", email: "emily.clark@example.com")
+        var f_ = Faculty_(id: UUID(uuidString: faculty.id), firstName: faculty.fName, lastName: faculty.lName, email: faculty.email)
         f_.preferences = faculty.preferences
-        updateFaculty(serverURL: "http://localhost:8080/", faculty: f_) { result in
+        updateFaculty(serverURL: "http://vcm-44136.vm.duke.edu:8080/", faculty: f_) { result in
             switch result {
             case .success(let response):
                 print("Update succeeded with status code: \(response.statusCode)")
@@ -111,74 +112,74 @@ struct PreferenceEdit: View {
 }
 
 
-struct PreferenceBlock: View {
-    let title: String
-    let options: [String]
-    @State var selectedOption: String
-    let onSelectOption: (String) -> Void
+//struct PreferenceBlock: View {
+//    let title: String
+//    let options: [String]
+//    @State var selectedOption: String
+//    let onSelectOption: (String) -> Void
+//
+//    var shouldStackVertically: Bool {
+//        options.count > 3 || options.contains { $0.count > 10 }
+//    }
+//
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 10) {
+//            Text(title)
+//                .font(.headline)
+//                .foregroundColor(.primary)
+//                .padding(.bottom, 5)
+//
+//            // Options Layout
+//            if shouldStackVertically {
+//                VStack(spacing: 10) {
+//                    ForEach(options, id: \.self) { option in
+//                        PreferenceButton(option: option, selectedOption: $selectedOption, onSelectOption: onSelectOption)
+//                    }
+//                }
+//            } else {
+//                HStack(spacing: 10) {
+//                    ForEach(options, id: \.self) { option in
+//                        PreferenceButton(option: option, selectedOption: $selectedOption, onSelectOption: onSelectOption)
+//                    }
+//                }
+//            }
+//        }
+//        .padding()
+//        .background(
+//            RoundedRectangle(cornerRadius: 12)
+//                .fill(Color.white.opacity(0.9))
+//                .shadow(color: Color.black.opacity(0.1), radius: 5)
+//        )
+//    }
+//}
 
-    var shouldStackVertically: Bool {
-        options.count > 3 || options.contains { $0.count > 10 }
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title)
-                .font(.headline)
-                .foregroundColor(.primary)
-                .padding(.bottom, 5)
-
-            // Options Layout
-            if shouldStackVertically {
-                VStack(spacing: 10) {
-                    ForEach(options, id: \.self) { option in
-                        PreferenceButton(option: option, selectedOption: $selectedOption, onSelectOption: onSelectOption)
-                    }
-                }
-            } else {
-                HStack(spacing: 10) {
-                    ForEach(options, id: \.self) { option in
-                        PreferenceButton(option: option, selectedOption: $selectedOption, onSelectOption: onSelectOption)
-                    }
-                }
-            }
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white.opacity(0.9))
-                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
-        )
-    }
-}
-
-struct PreferenceButton: View {
-    let option: String
-    @Binding var selectedOption: String
-    let onSelectOption: (String) -> Void
-
-    var body: some View {
-        Button(action: {
-            selectedOption = option
-            onSelectOption(option)
-        }) {
-            Text(option)
-                .font(.subheadline)
-                .foregroundColor(.white)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(
-                    selectedOption == option ? Color.blue : Color.gray
-                )
-                .cornerRadius(10)
-                .shadow(color: selectedOption == option ? Color.blue.opacity(0.5) : Color.gray.opacity(0.2), radius: 3, x: 0, y: 2)
-        }
-    }
-}
-
-#Preview {
-    PreferenceEdit()
-}
+//struct PreferenceButton: View {
+//    let option: String
+//    @Binding var selectedOption: String
+//    let onSelectOption: (String) -> Void
+//
+//    var body: some View {
+//        Button(action: {
+//            selectedOption = option
+//            onSelectOption(option)
+//        }) {
+//            Text(option)
+//                .font(.subheadline)
+//                .foregroundColor(.white)
+//                .padding()
+//                .frame(maxWidth: .infinity)
+//                .background(
+//                    selectedOption == option ? Color.blue : Color.gray
+//                )
+//                .cornerRadius(10)
+//                .shadow(color: selectedOption == option ? Color.blue.opacity(0.5) : Color.gray.opacity(0.2), radius: 3)
+//        }
+//    }
+//}
+//
+//#Preview {
+//    PreferenceEdit()
+//}
 
 
 

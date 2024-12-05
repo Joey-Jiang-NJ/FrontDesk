@@ -2,7 +2,7 @@
 //  CurCases.swift
 //  FrontDesk
 //
-//  Created by Martin Zuo on 11/25/24.
+//  Created by Martin Zuo on 11/15/24.
 //
 
 import SwiftUI
@@ -36,9 +36,10 @@ struct CurCases: View {
                         )
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.top, 20)
-                        .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
+                        .shadow(color: Color.black.opacity(0.2), radius: 5)
 
                     // Case List
+                    // show all the cases for scheduler to select
                     ScrollView {
                         VStack(alignment: .leading, spacing: 20) {
                             ForEach(data.caseList, id: \.id) { case_ in
@@ -59,7 +60,7 @@ struct CurCases: View {
                                     .background(
                                         RoundedRectangle(cornerRadius: 12)
                                             .fill(Color.white)
-                                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                                            .shadow(color: Color.black.opacity(0.1), radius: 5)
                                     )
                                 }
                                 .padding(.horizontal)
@@ -69,7 +70,7 @@ struct CurCases: View {
                     }
                 }
             }
-            .navigationTitle("")
+            // hode the navigationbar
             .navigationBarHidden(true)
         }
     }

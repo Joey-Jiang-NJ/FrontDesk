@@ -18,9 +18,9 @@ struct Case_: Identifiable ,Codable {
 
 struct Faculty_: Identifiable ,Codable {
     var id: UUID?
-    var firstName: String
-    var lastName: String
-    var email: String
+    var firstName: String = ""
+    var lastName: String = ""
+    var email: String = ""
     var preferences: [String: String]?
     var caseID: UUID?
 }
@@ -28,10 +28,10 @@ struct Faculty_: Identifiable ,Codable {
 
 struct Trainee_: Identifiable ,Codable {
     var id: UUID?
-    var firstName: String
-    var lastName: String
-    var email: String
-    var isAvailableForCase: Bool
+    var firstName: String?
+    var lastName: String?
+    var email: String?
+    var isAvailableForCase: Bool = false
     var photo: String?
     var currentAvg: Double?
     var evalNum: Int?
@@ -53,20 +53,33 @@ struct Rotation_: Identifiable, Codable {
 func traineeTrans(_ t: Trainee_) -> Trainee {
     let r = Trainee()
     r.traineeID = t.id!.uuidString
-    r.firstName = t.firstName
-    r.lastName = t.lastName
-    r.emailAddress = t.email
+    r.firstName = t.firstName!
+    r.lastName = t.lastName!
+    r.emailAddress = t.email!
     r.isAvailableForCase = t.isAvailableForCase
     r.picture = t.photo!
     r.rotationID = ""
     r.evalScore = t.currentAvg!
     r.evalCount = t.evalNum!
+    if t.caseID != nil {
+        r.caseID = t.caseID!.uuidString
+    }else{
+        r.caseID = ""
+    }
+//    print(r.picture)
     return r
 }
 
+
 func traineeTrans2(_ t: Trainee) -> Trainee_ {
-    let t = Trainee_(id: UUID(uuidString: t.traineeID), firstName: t.firstName, lastName: t.lastName, email: t.emailAddress, isAvailableForCase: t.isAvailableForCase, photo: nil, currentAvg: nil, caseID: UUID(uuidString: t.caseID))
+    let t = Trainee_(id: UUID(uuidString: t.traineeID), firstName: t.firstName, lastName: t.lastName, email: t.emailAddress, isAvailableForCase: t.isAvailableForCase, photo: t.picture, currentAvg: t.evalScore, evalNum: t.evalCount, caseID: UUID(uuidString: t.caseID))
+//    print(t.photo!)
     return t
+}
+
+func facultyTrans2(_ f: Faculty) -> Faculty_ {
+    let f = Faculty_(id: UUID(uuidString: f.id), firstName: f.fName, lastName: f.lName, email: f.email, preferences: f.preferences, caseID: UUID(uuidString: f.caseID))
+    return f
 }
 
 func facultyTrans(_ f: Faculty_) -> Faculty {
@@ -78,6 +91,8 @@ func facultyTrans(_ f: Faculty_) -> Faculty {
     r.fName = f.firstName
     r.lName = f.lastName
     r.caseID = f.caseID!.uuidString
+    r.email = f.email
+    print(f.email)
     return r
 }
 
@@ -138,7 +153,7 @@ func fetchData<T: Codable>(from urlString: String, completion: @escaping (Result
     task.resume()
 }
 
-func updateCaseLog(
+func updateTrainee(
     serverURL: String,
     trainee: Trainee_,
     completion: @escaping (Result<HTTPURLResponse, Error>) -> Void
@@ -200,4 +215,217 @@ func updateFaculty(
     }
 
     task.resume()
+}
+
+// for Scheduler
+func getAllTrainees(onError: @escaping (Error) -> Void) {
+    var trainees: [Trainee_] = []
+    let group = DispatchGroup()
+    group.enter()
+    fetchData(from: "http://vcm-44136.vm.duke.edu:8080/trainees") { (result: Result<[Trainee_], Error>) in
+        DispatchQueue.main.async{
+            switch result {
+            case .success(let data):
+                trainees = data
+                ScheduleData.data.traineeList = []
+                for t in trainees{
+                    ScheduleData.data.traineeList.append(traineeTrans(t))
+                }
+            case .failure(let error):
+                print("Error fetching cases:", error)
+                    
+                onError(error)
+            }
+            group.leave()
+        }
+    }
+}
+
+// for Scheduler
+func getAllFaculties(onError: @escaping (Error) -> Void) {
+    var faculties: [Faculty_] = []
+    let group = DispatchGroup()
+    group.enter()
+    fetchData(from: "http://vcm-44136.vm.duke.edu:8080/faculties") { (result: Result<[Faculty_], Error>) in
+        DispatchQueue.main.async{
+            switch result {
+            case .success(let data):
+                faculties = data
+                ScheduleData.data.facultyList = []
+                for f in faculties {
+                    ScheduleData.data.facultyList.append(facultyTrans(f))
+                }
+            case .failure(let error):
+                print("Error fetching cases:", error)
+                onError(error)
+            }
+            group.leave()
+        }
+    }
+}
+
+// for Scheduler
+func getAllCases(onError: @escaping (Error) -> Void) {
+    var cases: [Case_] = []
+    let group = DispatchGroup()
+    group.enter()
+    fetchData(from: "http://vcm-44136.vm.duke.edu:8080/cases") { (result: Result<[Case_], Error>) in
+        DispatchQueue.main.async{
+            switch result {
+            case .success(let data):
+                cases = data
+                ScheduleData.data.caseList = []
+                for c in cases {
+                    ScheduleData.data.caseList.append(caseTrans(c))
+                }
+            case .failure(let error):
+                print("Error fetching cases:", error)
+                onError(error)
+            }
+            group.leave()
+        }
+    }
+}
+
+
+// for Trainee
+func getTraineee(_ traineeID: String) {
+    let group = DispatchGroup()
+    group.enter()
+    var t: Trainee_ = Trainee_()
+    fetchData(from: "http://vcm-44136.vm.duke.edu:8080/trainees/\(traineeID)") { (result: Result<Trainee_, Error>) in
+        DispatchQueue.main.async{
+            switch result {
+            case .success(let data):
+                t = data
+                let trainee = traineeTrans(t)
+                copyTrainee(from: trainee, to: Trainee.activeTrainee)
+            case .failure(let error):
+                print("Error fetching cases:", error)
+            }
+            group.leave()
+        }
+    }
+}
+
+// for Trainee
+func getRelatedFaculties(_ caseID: String){
+    var faculties: [Faculty_] = []
+    let group = DispatchGroup()
+    group.enter()
+    fetchData(from: "http://vcm-44136.vm.duke.edu:8080/faculties") { (result: Result<[Faculty_], Error>) in
+        DispatchQueue.main.async{
+            switch result {
+            case .success(let data):
+                faculties = data
+                Trainee.activeTrainee.relatedFaculties = []
+                for f in faculties{
+                    if f.caseID != nil && f.caseID!.uuidString.lowercased() == caseID.lowercased(){
+                        Trainee.activeTrainee.relatedFaculties.append(facultyTrans(f))
+                    }
+                }
+            case .failure(let error):
+                print("Error fetching cases:", error)
+            }
+            group.leave()
+        }
+    }
+}
+
+// for Faculty
+func getFaculty(_ facultyID: String) {
+    let group = DispatchGroup()
+    var f: Faculty_ = Faculty_()
+    group.enter()
+    fetchData(from: "http://vcm-44136.vm.duke.edu:8080/faculties/\(facultyID)") { (result: Result<Faculty_, Error>) in
+        DispatchQueue.main.async{
+            switch result {
+            case .success(let data):
+                f = data
+                let faculty = facultyTrans(f)
+                copyFaculty(from: faculty, to: Faculty.activeFaculty)
+            case .failure(let error):
+                print("Error fetching cases:", error)
+            }
+            group.leave()
+        }
+    }
+}
+
+// for Faculty
+func getRelatedTrainees(_ caseID: String){
+    var trainees: [Trainee_] = []
+    let group = DispatchGroup()
+    group.enter()
+    fetchData(from: "http://vcm-44136.vm.duke.edu:8080/trainees") { (result: Result<[Trainee_], Error>) in
+        DispatchQueue.main.async{
+            switch result {
+            case .success(let data):
+                trainees = data
+                Faculty.activeFaculty.relatedTrainees = []
+                for t in trainees{
+                    if t.caseID != nil && t.caseID!.uuidString.lowercased() == caseID.lowercased(){
+                        Faculty.activeFaculty.relatedTrainees.append(traineeTrans(t))
+                    }
+                }
+            case .failure(let error):
+                print("Error fetching cases:", error)
+            }
+            group.leave()
+        }
+    }
+}
+
+// for Trainee and Faculty
+func getCases(_ caseID: String) {
+    Case.activeCase = Case()
+    let group = DispatchGroup()
+    var cases: [Case_] = []
+    group.enter()
+    fetchData(from: "http://vcm-44136.vm.duke.edu:8080/cases") { (result: Result<[Case_], Error>) in
+        DispatchQueue.main.async{
+            switch result {
+            case .success(let data):
+                cases = data
+                for c in cases{
+                    if c.id!.uuidString.lowercased() == caseID.lowercased(){
+                        let tmp = caseTrans(c)
+                        Case.activeCase.id = tmp.id
+                        Case.activeCase.type = tmp.type
+                        Case.activeCase.diagnosis = tmp.diagnosis
+                        Case.activeCase.symptoms = tmp.symptoms
+                        //print(Case.activeCase.id)
+                        break
+                    }
+                }
+            case .failure(let error):
+                print("Error fetching cases:", error)
+            }
+            group.leave()
+        }
+    }
+}
+
+func upLoadTrainee(_ t: Trainee) {
+    let t_: Trainee_ = traineeTrans2(t)
+    updateTrainee(serverURL: "http://vcm-44136.vm.duke.edu:8080/", trainee: t_) { result in
+        switch result {
+        case .success(let response):
+            print("Update succeeded with status code: \(response.statusCode)")
+        case .failure(let error):
+            print("Update failed: \(error.localizedDescription)")
+        }
+    }
+}
+
+func upLoadFaculty(_ f: Faculty) {
+    let f_: Faculty_ = facultyTrans2(f)
+    updateFaculty(serverURL: "http://vcm-44136.vm.duke.edu:8080/", faculty: f_) { result in
+        switch result {
+        case .success(let response):
+            print("Update succeeded with status code: \(response.statusCode)")
+        case .failure(let error):
+            print("Update failed: \(error.localizedDescription)")
+        }
+    }
 }

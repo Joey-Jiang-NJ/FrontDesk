@@ -12,7 +12,7 @@ struct CaseView: View {
     @ObservedObject var curCase: Case
     
     var faculties: [Faculty] {
-        data.faclutyList.filter{curCase.faculties.contains($0.id)}
+        data.facultyList.filter{curCase.faculties.contains($0.id)}
     }
     
     var body: some View {
@@ -21,6 +21,7 @@ struct CaseView: View {
                 .font(.system(size: 25, weight: .bold, design: .default))
                 .padding()
             List{
+                // first show the information of the current case
                 HStack{
                     Text("Case ID:").fontWeight(.bold)
                     Text(curCase.id)
@@ -43,15 +44,16 @@ struct CaseView: View {
                     Text(curCase.diagnosis)
                 }
                 
-                Section(header: Text("Faculties").textCase(nil).font(.system(size: 28, weight:.bold, design: .default)).foregroundStyle(Color.orange)){
-                    ForEach(faculties) { faculty in
-                        NavigationLink{
-                            FacultyPreferenceView(faculty: faculty)
-                        } label: {
-                            Text("\(faculty.fName) \(faculty.lName)")
-                        }
-                    }
-                }
+                // the second section show the information of the faculty
+//                Section(header: Text("Faculties").textCase(nil).font(.system(size: 28, weight:.bold, design: .default)).foregroundStyle(Color.orange)){
+//                    ForEach(faculties) { faculty in
+//                        NavigationLink{
+//                            FacultyPreferenceView(faculty: faculty)
+//                        } label: {
+//                            Text("\(faculty.fName) \(faculty.lName)")
+//                        }
+//                    }
+//                }
             }
             
         }

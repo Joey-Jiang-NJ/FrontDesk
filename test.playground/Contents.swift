@@ -76,12 +76,71 @@
 
 import Foundation
 
-func updateCaseLog(
+//func updateCaseLog(
+//    serverURL: String,
+//    trainee: Trainee_,
+//    completion: @escaping (Result<HTTPURLResponse, Error>) -> Void
+//) {
+//    guard let url = URL(string: "\(serverURL)trainees/\(trainee.id!.uuidString)") else {
+//        print("Invalid URL")
+//        return
+//    }
+//
+//    var request = URLRequest(url: url)
+//    request.httpMethod = "PUT"
+//    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//    do {
+//        let jsonData = try JSONEncoder().encode(trainee)
+//        request.httpBody = jsonData
+//    } catch {
+//        print("Failed to encode case log: \(error)")
+//        return
+//    }
+//
+//    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//        if let error = error {
+//           
+//            return
+//        }
+//
+//        if let httpResponse = response as? HTTPURLResponse {
+//            
+//        }
+//    }
+//
+//    task.resume()
+//}
+//
+//
+//var t = Trainee_(id: UUID(uuidString: "076eee0e-04bf-413a-8dc1-5a52ed8ee7b7"), firstName: "David", lastName: "Doe", email: "john@doe.com", isAvailableForCase: true, photo: nil, currentAvg: nil)
+//
+//
+//updateCaseLog(serverURL: "http://localhost:8080/", trainee: t) { result in
+//    switch result {
+//    case .success(let response):
+//        print("Update succeeded with status code: \(response.statusCode)")
+//    case .failure(let error):
+//        print("Update failed: \(error.localizedDescription)")
+//    }
+//}
+
+struct Faculty_: Identifiable ,Codable {
+    var id: UUID?
+    var firstName: String = ""
+    var lastName: String = ""
+    var email: String = ""
+    var preferences: [String: String]?
+    var caseID: UUID?
+}
+
+
+func updateFaculty(
     serverURL: String,
-    trainee: Trainee_,
+    faculty: Faculty_,
     completion: @escaping (Result<HTTPURLResponse, Error>) -> Void
 ) {
-    guard let url = URL(string: "\(serverURL)trainees/\(trainee.id!.uuidString)") else {
+    guard let url = URL(string: "\(serverURL)faculties/\(faculty.id!.uuidString)") else {
         print("Invalid URL")
         return
     }
@@ -91,7 +150,7 @@ func updateCaseLog(
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     do {
-        let jsonData = try JSONEncoder().encode(trainee)
+        let jsonData = try JSONEncoder().encode(faculty)
         request.httpBody = jsonData
     } catch {
         print("Failed to encode case log: \(error)")
@@ -100,12 +159,8 @@ func updateCaseLog(
 
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-           
+            print(error)
             return
-        }
-
-        if let httpResponse = response as? HTTPURLResponse {
-            
         }
     }
 
@@ -113,10 +168,62 @@ func updateCaseLog(
 }
 
 
-var t = Trainee_(id: UUID(uuidString: "076eee0e-04bf-413a-8dc1-5a52ed8ee7b7"), firstName: "David", lastName: "Doe", email: "john@doe.com", isAvailableForCase: true, photo: nil, currentAvg: nil)
+var pref = [
+    "preoperative communication": "phone",
+    "preop assessment": "",
+    "preop orders": "",
+    "premedication": "",
+    "maintenance": "",
+    "pain management": "",
+    "fluid management": "",
+    "postoperative orders": ""
+]
 
+var f = Faculty_(
+    id: UUID(uuidString: "30365c96-2487-45de-97f9-3a3e216656e2"),
+    firstName: "Dr. Emily",
+    lastName: "Clark",
+    email: "emily.clark@example.com",
+    preferences: pref
+)
 
-updateCaseLog(serverURL: "http://localhost:8080/", trainee: t) { result in
+var f1 = Faculty_(
+    id: UUID(uuidString: "6822f5d5-32c6-4b60-9c25-733955d3984f"),
+    firstName: "Dr. Michael",
+    lastName: "Brown",
+    email: "michael.brown@example.com",
+    preferences: pref
+)
+
+var f2 = Faculty_(
+    id: UUID(uuidString: "9f8471a2-ceea-43c8-a372-9f9349907ff3"),
+    firstName: "Dr. Sarah",
+    lastName: "Davis",
+    email: "sarah.davis@example.com",
+    preferences: pref
+)
+
+var f3 = Faculty_(
+    id: UUID(uuidString: "92982a29-c3be-447e-a31e-579ca9b4d055"),
+    firstName: "Dr. Robert",
+    lastName: "Miller",
+    email: "robert.miller@example.com",
+    preferences: pref
+)
+
+var f4 = Faculty_(
+    id: UUID(uuidString: "e0a3213c-f6c6-4db5-b6ad-7d23ec9dfd24"),
+    firstName: "Dr. Laura",
+    lastName: "Wilson",
+    email: "laura.wilson@example.com",
+    preferences: pref
+)
+
+//f_.preferences = faculty.preferences
+updateFaculty(
+    serverURL: "http://vcm-44136.vm.duke.edu:8080/",
+    faculty: f
+) { result in
     switch result {
     case .success(let response):
         print("Update succeeded with status code: \(response.statusCode)")
@@ -125,3 +232,52 @@ updateCaseLog(serverURL: "http://localhost:8080/", trainee: t) { result in
     }
 }
 
+updateFaculty(
+    serverURL: "http://vcm-44136.vm.duke.edu:8080/",
+    faculty: f1
+) { result in
+    switch result {
+    case .success(let response):
+        print("Update succeeded with status code: \(response.statusCode)")
+    case .failure(let error):
+        print("Update failed: \(error.localizedDescription)")
+    }
+}
+
+updateFaculty(
+    serverURL: "http://vcm-44136.vm.duke.edu:8080/",
+    faculty: f2
+) { result in
+    switch result {
+    case .success(let response):
+        print("Update succeeded with status code: \(response.statusCode)")
+    case .failure(let error):
+        print("Update failed: \(error.localizedDescription)")
+    }
+}
+
+
+updateFaculty(
+    serverURL: "http://vcm-44136.vm.duke.edu:8080/",
+    faculty: f3
+) { result in
+    switch result {
+    case .success(let response):
+        print("Update succeeded with status code: \(response.statusCode)")
+    case .failure(let error):
+        print("Update failed: \(error.localizedDescription)")
+    }
+}
+
+
+updateFaculty(
+    serverURL: "http://vcm-44136.vm.duke.edu:8080/",
+    faculty: f4
+) { result in
+    switch result {
+    case .success(let response):
+        print("Update succeeded with status code: \(response.statusCode)")
+    case .failure(let error):
+        print("Update failed: \(error.localizedDescription)")
+    }
+}

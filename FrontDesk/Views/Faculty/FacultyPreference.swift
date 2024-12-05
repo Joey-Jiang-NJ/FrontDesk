@@ -26,12 +26,12 @@ struct FacultyPreferenceView: View {
                     )
                 )
                 .cornerRadius(10)
-                .shadow(color: .gray.opacity(0.5), radius: 10, x: 0, y: 5)
+                .shadow(color: .gray.opacity(0.5), radius: 10)
 
             // List of Preferences
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    //This part is from gpt
+                    // list all the preference here
                     ForEach(
                         faculty.preferences.sorted(by: <),
                         id: \.key
@@ -46,6 +46,7 @@ struct FacultyPreferenceView: View {
                                 ) // Icon based on key
                                 .font(.title2)
                                 .foregroundColor(.blue)
+                                //put the key on the top
                                 Text(key)
                                     .font(
                                         .system(
@@ -57,17 +58,17 @@ struct FacultyPreferenceView: View {
                                     .foregroundColor(.primary)
                             }
 
-                            // Value (Description)
+                            // Put the value on the bottom
                             Text(value)
                                 .font(
                                     .system(
                                         size: 16,
-                                        weight: .regular,
-                                        design: .default
+                                        weight: .regular
+
                                     )
                                 )
                                 .foregroundColor(.secondary)
-                                .padding(.top, 2)
+                                .padding(.top, 2.2)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
@@ -76,21 +77,20 @@ struct FacultyPreferenceView: View {
                                 .fill(Color.white)
                                 .shadow(
                                     color: .gray.opacity(0.2),
-                                    radius: 5,
-                                    x: 0,
-                                    y: 2
+                                    radius: 5
                                 )
                         )
                     }
                 }
                 .padding()
             }
-            .background(Color.gray.opacity(0.1).edgesIgnoringSafeArea(.all))
+            .background(Color.gray.opacity(0.1).ignoresSafeArea())
         }
         .padding()
     }
 
-    // Function to determine icon based on preference key
+    // MARK: BEGIN Learned from Chatgpt how to organize my code
+    //Function to determine icon based on preference key
     private func iconForPreference(key: String) -> String {
         switch key.lowercased() {
         case "preoperative communication": return "message.fill"
@@ -104,6 +104,7 @@ struct FacultyPreferenceView: View {
         default: return "list.bullet"
         }
     }
+    // MARK: END
 }
 
 //#Preview {

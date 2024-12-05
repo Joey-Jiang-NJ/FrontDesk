@@ -23,59 +23,20 @@ struct TraineeViewF: View {
                 )
                 .ignoresSafeArea()
                 ScrollView {
-                    if trainee.traineeID.lowercased() == "076eee0e-04bf-413a-8dc1-5a52ed8ee7b7" {
-                        Image("head")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                            .shadow(radius: 3)
-                    }else if trainee.firstName == "Sarah" {
-                        Image("head1")
+                    if !trainee.picture.isEmpty {
+                        Image(uiImage: imageFromString(trainee.picture))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    } else if trainee.firstName == "Michael" {
-                        Image("head2")
+                    } else {
+                        Image("Elaina")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    } else if trainee.firstName == "Emily" {
-                        Image("head3")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    } else if trainee.lastName == "Brown" {
-                        Image("head4")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    }
-                    else {
-                        if !trainee.picture.isEmpty {
-                            Image(uiImage: imageFromString(trainee.picture))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 150, height: 150)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                        } else {
-                            Image("Elaina")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 150, height: 150)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                        }
                     }
 //                    if !trainee.picture.isEmpty {
 //                        Image(uiImage: imageFromString(trainee.picture))
@@ -92,7 +53,7 @@ struct TraineeViewF: View {
 //                            .clipShape(Circle())
 //                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
 //                    }
-                    
+                    // show the information of the trainee below
                     VStack(alignment: .leading,spacing: 10) {
                         HStack(spacing: 0){
                             Text("ID:").bold()
@@ -105,7 +66,7 @@ struct TraineeViewF: View {
                             .textFieldStyle(.roundedBorder)
                             .disabled(true)
                         }.padding()
-                        
+                        // First name part
                         HStack(spacing: 0){
                             Text("First Name:").bold()
                                 .frame(width: 100, alignment: .leading)
@@ -117,19 +78,19 @@ struct TraineeViewF: View {
                             .textFieldStyle(.roundedBorder)
                             .disabled(true)
                         }.padding()
-                        
+                        // Last name part
                         HStack(spacing: 0){
                             Text("Last Name:").bold()
                                 .frame(width: 100, alignment: .leading)
                             TextField(
-                                "Enter your first name",
+                                "Enter your last name",
                                 text: $trainee.lastName
                             )
                             .autocapitalization(.none)
                             .textFieldStyle(.roundedBorder)
                             .disabled(true)
                         }.padding()
-                        
+                        // Email part
                         HStack(spacing: 0){
                             Text("Email:").bold()
                                 .frame(width: 100, alignment: .leading)
@@ -165,15 +126,52 @@ struct TraineeViewF: View {
 //                            .cornerRadius(10)
 //                    }
 //                    .padding()
-                    
+                    // link to the rotation part
                     NavigationLink(destination: RotationHistoryView(curRotation: Rotation.defaultCurRotation, pastRotations: Rotation.defaultPastRotations)
-                        .environmentObject(Trainee.defaultTrainee)) {
-                        ButtonContent(label: "Ratation History", icon: "doc.text.magnifyingglass", colors: [Color.orange, Color.red])
+                        .environmentObject(trainee)) {
+                            HStack {
+                                Image(systemName: "doc.text.magnifyingglass")
+                                    .font(.title2)
+                                Text("Rotation History")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                            }
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient( colors: [Color.orange, Color.red]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .cornerRadius(12)
+                       // ButtonContent(label: "Ratation History", icon: "doc.text.magnifyingglass", colors: [Color.orange, Color.red])
                             .frame(width: 350)
                     }
                     
+                    // link to the evaluation part
                     NavigationLink(destination: Evaluation(trainee: trainee)) {
-                        ButtonContent(label: "Faculty Evaluation", icon: "doc.text.magnifyingglass", colors: [Color.green, Color.teal])
+                        HStack {
+                            Image(systemName: "doc.text.magnifyingglass")
+                                .font(.title2)
+                            Text( "Faculty Evaluation")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                        }
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient( colors: [Color.green, Color.teal]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .cornerRadius(12)
+                       // ButtonContent(label: "Faculty Evaluation", icon: "doc.text.magnifyingglass", colors: [Color.green, Color.teal])
                             .frame(width: 350)
                     }
                     

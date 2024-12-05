@@ -23,58 +23,21 @@ struct TraineeView: View {
                 )
                 .ignoresSafeArea()
                 ScrollView {
-                    if trainee.traineeID.lowercased() == "076eee0e-04bf-413a-8dc1-5a52ed8ee7b7" {
-                        Image("head")
+                    // Again, when there is no picture of trainee, add the default picture
+                    if !trainee.picture.isEmpty {
+                        Image(uiImage: imageFromString(trainee.picture))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    } else if trainee.firstName == "Sarah" {
-                        Image("head1")
+                            .overlay(Circle().stroke(Color.gray))
+                    } else {
+                        Image("Elaina")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 150, height: 150)
                             .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    } else if trainee.firstName == "Michael" {
-                        Image("head2")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    } else if trainee.firstName == "Emily" {
-                        Image("head3")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    } else if trainee.lastName == "Brown" {
-                        Image("head4")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 150, height: 150)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    }
-                    else {
-                        if !trainee.picture.isEmpty {
-                            Image(uiImage: imageFromString(trainee.picture))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 150, height: 150)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                        } else {
-                            Image("Elaina")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 150, height: 150)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                        }
+                            .overlay(Circle().stroke(Color.gray))
                     }
 //                    if !trainee.picture.isEmpty {
 //                        Image(uiImage: imageFromString(trainee.picture))
@@ -91,9 +54,9 @@ struct TraineeView: View {
 //                            .clipShape(Circle())
 //                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
 //                    }
-                    
+                    // first show the information of the selected trainee
                     VStack(alignment: .leading,spacing: 10) {
-                        HStack(spacing: 0){
+                        HStack(){
                             Text("ID:").bold()
                                 .frame(width: 100, alignment: .leading)
                             TextField(
@@ -105,7 +68,7 @@ struct TraineeView: View {
                             .disabled(true)
                         }.padding()
                         
-                        HStack(spacing: 0){
+                        HStack(){
                             Text("First Name:").bold()
                                 .frame(width: 100, alignment: .leading)
                             TextField(
@@ -117,11 +80,11 @@ struct TraineeView: View {
                             .disabled(true)
                         }.padding()
                         
-                        HStack(spacing: 0){
+                        HStack(){
                             Text("Last Name:").bold()
                                 .frame(width: 100, alignment: .leading)
                             TextField(
-                                "Enter your first name",
+                                "Enter your last name",
                                 text: $trainee.lastName
                             )
                             .autocapitalization(.none)
@@ -129,7 +92,7 @@ struct TraineeView: View {
                             .disabled(true)
                         }.padding()
                         
-                        HStack(spacing: 0){
+                        HStack(){
                             Text("Email:").bold()
                                 .frame(width: 100, alignment: .leading)
                             TextField(
@@ -150,10 +113,10 @@ struct TraineeView: View {
                     //                )
                     
                     
-                    
+                    // similar to the trainee page, scheduler can also accesss the rotation page of the trainee
                     NavigationLink{
                         RotationHistoryView(curRotation: Rotation.defaultCurRotation, pastRotations: Rotation.defaultPastRotations)
-                            .environmentObject(Trainee.defaultTrainee)
+                            .environmentObject(trainee)
                     } label: {
                         Text("Ratation History")
                             .font(.headline)

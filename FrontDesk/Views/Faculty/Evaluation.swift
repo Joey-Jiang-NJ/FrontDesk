@@ -14,6 +14,8 @@ struct Evaluation: View {
     @State var op2: Int?
     @State var op3: Int?
     @State var op4: Int?
+    
+    @State var showSave: Bool = true
     var body: some View {
         ZStack {
             // Background Gradient
@@ -40,7 +42,7 @@ struct Evaluation: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.top, 20)
                         .padding(.bottom, 10)
-                        .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 4)
+                        .shadow(color: Color.black.opacity(0.2), radius: 5)
 
                     // Categories Section
                     Text("Evaluation Categories")
@@ -58,7 +60,7 @@ struct Evaluation: View {
                     .background(
                         RoundedRectangle(cornerRadius: 12)
                             .fill(Color.white.opacity(0.9))
-                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+                            .shadow(color: Color.black.opacity(0.1), radius: 5)
                     )
 
                     // Feedback Cards
@@ -93,26 +95,71 @@ struct Evaluation: View {
                 }
 
                 // Save Button
-                Button(action: {
-                    
-                }) {
-                    Text("Save")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(
-                            LinearGradient(
-                                gradient: Gradient(colors: [Color.blue, Color.purple]),
-                                startPoint: .leading,
-                                endPoint: .trailing
+                // begin to calculate the score of the trainee
+                if showSave == true {
+                    Button(action: {
+                        var score: Double = 0
+                        // YES for 2, NO for 1, N/A for 0
+                        if op1 == 0 {
+                            score += 2
+                        } else if op1 == 1 {
+                            score -= 1
+                        }
+                        
+                        if op2 == 0 {
+                            score += 2
+                        } else if op2 == 1 {
+                            score -= 1
+                        }
+                        
+                        if op3 == 0 {
+                            score += 2
+                        } else if op3 == 1 {
+                            score -= 1
+                        }
+                        
+                        if op4 == 0 {
+                            score += 2
+                        } else if op4 == 1 {
+                            score += 3
+                        } else if op4 == 2 {
+                            score += 2
+                        } else if op4 == 3 {
+                            score += 1
+                        } else if op4 == 4 {
+                            score += 4
+                        } else if op4 == 5 {
+                            score -= 1
+                        }
+                        
+                        trainee.evalScore = (Double(trainee.evalScore)*Double(trainee.evalCount) + score)/(Double(trainee.evalCount)+1)
+                        trainee.evalCount += 1
+                        trainee.isAvailableForCase = true
+                        trainee.caseID = ""
+    //                    print(trainee.firstName, trainee.evalCount, trainee.evalScore)
+                        
+                        upLoadTrainee(trainee)
+                        showSave = false
+                        
+                    }) {
+                        Text("Save")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color.blue, Color.purple]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
                             )
-                        )
-                        .cornerRadius(12)
-                        .shadow(color: Color.blue.opacity(0.4), radius: 5, x: 0, y: 3)
+                            .cornerRadius(12)
+                            .shadow(color: Color.blue.opacity(0.4), radius: 5)
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 20)
             }
         }
     }
@@ -131,7 +178,7 @@ struct EvaluationCategory: View {
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.white.opacity(0.9))
-                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 2)
+                    .shadow(color: Color.black.opacity(0.1), radius: 3)
             )
     }
 }
@@ -154,7 +201,7 @@ struct FeedbackCard: View {
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.white.opacity(0.9))
-                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+                .shadow(color: Color.black.opacity(0.1), radius: 5)
         )
     }
 }
@@ -162,10 +209,11 @@ struct FeedbackCard: View {
 struct FeedbackOptions: View {
     @Binding var selectedOption: Int?
     var options: [String]
-
+// MARK: WE learned this from gpt
     var shouldVStack: Bool {
         options.count > 4 || options.contains { $0.count > 10 }
     }
+    // MARK: END
 
     var body: some View {
         Group {
@@ -202,7 +250,7 @@ struct FeedbackOptions: View {
                     selectedOption == index ? Color.blue : Color.gray
                 )
                 .cornerRadius(10)
-                .shadow(color: selectedOption == index ? Color.blue.opacity(0.5) : Color.gray.opacity(0.2), radius: 3, x: 0, y: 2)
+                .shadow(color: selectedOption == index ? Color.blue.opacity(0.5) : Color.gray.opacity(0.2), radius: 3)
         }
     }
 }

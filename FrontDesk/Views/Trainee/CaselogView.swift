@@ -6,60 +6,10 @@
 //
 
 import SwiftUI
-import SwiftData
-
-//struct CaseLogListView: View {
-//    @EnvironmentObject var trainee: Trainee
-////    let caseLogs = [
-////        CaseLog(title: "Case 1", date: Date(), description: "A 45-year-old male patient underwent laparoscopic cholecystectomy for gallstone disease. The surgery was uneventful; however, within 24 hours postoperatively, the patient developed afever and abdominal pain. A CT scan revealed a small bile leak at the surgical site.The patient was managed with percutaneous drainage and antibiotics. This case highlightsthe importance of postoperative monitoring and timely intervention."),
-////        CaseLog(title: "Case 2", date: Date() - 119878, description: "A 32-year-old female presented to the labor and delivery unit at 39 weeks of gestationwith spontaneous rupture of membranes. During delivery, fetal heart rate decelerationswere noted, requiring an emergency cesarean section. A healthy 7-pound baby girl was delivered.The mother experienced mild hemorrhage, which was controlled with uterotonics.This case underscores the importance of rapid decision-making in obstetrics."),
-////        CaseLog(title: "Case 3", date: Date() - 993284, description: "A 60-year-old male presented to the emergency department with chest pain, radiating to the left arm, accompanied by shortness of breath and diaphoresis. ECG showed ST-segment elevation in the anterior leads, indicating an acute anterior myocardial infarction.The patient was taken emergently to the cath lab, where a stent was placed in the LAD artery.He was started on dual antiplatelet therapy and discharged in stable condition.")
-////    ]
-//    var body: some View {
-//        NavigationView {
-//            ZStack {
-//                LinearGradient(
-//                    gradient: Gradient(colors: [Color.blue.opacity(0.2), Color.green.opacity(0.2)]),
-//                    startPoint: .top,
-//                    endPoint: .bottom
-//                )
-//                .ignoresSafeArea()
-//
-//                List(trainee.caseLogs) { caseLog in
-//                    NavigationLink(destination: CaseDetailView(caseLog: caseLog)) {
-//                        HStack {
-//                            Image(systemName: "folder.fill")
-//                                .font(.largeTitle)
-//                                .foregroundColor(.blue)
-//
-//                            VStack(alignment: .leading) {
-//                                Text(caseLog.title)
-//                                    .font(.headline)
-//                                Text(caseLog.date, style: .date)
-//                                    .font(.subheadline)
-//                                    .foregroundColor(.secondary)
-//                            }
-//                        }
-//                        .padding()
-//                        .background(
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(Color.gray.opacity(0.1))
-//                        )
-//                    }
-//                }
-//                .scrollContentBackground(.hidden)
-//                .listStyle(InsetGroupedListStyle())
-//            }
-//            .navigationTitle("Case Logs")
-//        }
-//    }
-//}
-
-import SwiftUI
 
 struct CaseLogListView: View {
     @EnvironmentObject var trainee: Trainee
-    @State private var showSheet = false
+    @State private var showSheetAction = false
     @State private var newCaseLog = CaseLog(
         title: "",
         date: Date(),
@@ -68,30 +18,35 @@ struct CaseLogListView: View {
 
     var body: some View {
         NavigationView {
+            // first, set the background of the page
             ZStack {
                 LinearGradient(
                     gradient: Gradient(
                         colors: [
-                            Color.blue.opacity(0.2),
-                            Color.green.opacity(0.2)
+                            Color.blue.opacity(0.21),
+                            Color.green.opacity(0.22)
                         ]
                     ),
                     startPoint: .top,
                     endPoint: .bottom
                 )
                 .ignoresSafeArea()
+                // make the background filled with all the screen
 
                 VStack {
                     List{
                         ForEach(trainee.caseLogs, id: \.id){ caseLog in
+                            // for each case log, we enter different detail view according to case id
                             NavigationLink(
-                                destination: CaseDetailView(caseLog: caseLog)
+                                destination: CaseDetailView(caseLog: caseLog).environmentObject(trainee)
                             ) {
+                                // Here is one area for the folder
                                 HStack {
+                                    // first add the image
                                     Image(systemName: "folder.fill")
                                         .font(.largeTitle)
                                         .foregroundColor(.blue)
-                                    
+                                    // then get the title and the date
                                     VStack(alignment: .leading) {
                                         Text(caseLog.title)
                                             .font(.headline)
@@ -101,6 +56,7 @@ struct CaseLogListView: View {
                                     }
                                 }
                                 .padding()
+                                // use the gray background to make the information more obvious
                                 .background(
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color.gray.opacity(0.1))
@@ -108,9 +64,11 @@ struct CaseLogListView: View {
                             }
                         }
                     }
+                    // hide the origianl list style to make the background also shown in the list area
                     .scrollContentBackground(.hidden)
-                    .listStyle(InsetGroupedListStyle())
-
+                 
+                    
+                    // add the plus button for user to add case log
                     Button(
                         action: {
                             newCaseLog = CaseLog(
@@ -118,7 +76,7 @@ struct CaseLogListView: View {
                                 date: Date(),
                                 description: ""
                             )
-                            showSheet = true
+                            showSheetAction = true
                         }) {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
@@ -135,14 +93,13 @@ struct CaseLogListView: View {
                 }
             }
             .navigationTitle("Case Logs")
-            .sheet(isPresented: $showSheet) {
+            .sheet(isPresented: $showSheetAction) {
                 EditCaseLogView(caseLog: $newCaseLog) {
-                    print(trainee.caseLogs)
                     trainee.caseLogs.append(newCaseLog)
-                    print(trainee.caseLogs)
-                    showSheet = false
-                } onCancel: {
-                    showSheet = false
+                    _ = trainee.saveToArchCL()
+                    showSheetAction = false
+                } Cancelaction: {
+                    showSheetAction = false
                 }
             }
         }
@@ -153,16 +110,19 @@ struct EditCaseLogView: View {
     @Binding var caseLog: CaseLog
     @EnvironmentObject var trainee: Trainee
     
-    var onSave: () -> Void
-    var onCancel: () -> Void
+    // Here we use two func as variable
+    var Saveaction: () -> Void
+    var Cancelaction: () -> Void
 
     var body: some View {
         NavigationView {
+            //MARK: we leanred Form from gpt
             Form {
                 Section(header: Text("Case Title")) {
                     TextField("Enter case title", text: $caseLog.title)
                 }
                 Section(header: Text("Case Date")) {
+                    // MARK: We ask chatgpt on how to use Date Picker
                     DatePicker(
                         "Enter case date",
                         selection: $caseLog.date,
@@ -175,15 +135,16 @@ struct EditCaseLogView: View {
                 }
             }
             .navigationTitle("Edit Case Log")
+            // add the save and cancel button on the top of the page
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        onCancel()
+                        Cancelaction()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        onSave()
+                        Saveaction()
                         
                     }
                 }
@@ -192,16 +153,72 @@ struct EditCaseLogView: View {
     }
 }
 
-#Preview {
-    CaseLogListView()
-}
+//struct EditCaseLogView: View {
+//    @Binding var caseLog: CaseLog
+//    @EnvironmentObject var trainee: Trainee
+//
+//    var onSave: () -> Void
+//    var onCancel: () -> Void
+//
+//    var body: some View {
+//        NavigationView {
+//            ScrollView {
+//                VStack(alignment: .leading, spacing: 16) {
+//                    Text("Case Title")
+//                        .font(.headline)
+//                    TextField("Enter case title", text: $caseLog.title)
+//                        .textFieldStyle(RoundedBorderTextFieldStyle())
+//
+//                    Text("Case Date")
+//                        .font(.headline)
+//                    DatePicker(
+//                        "Enter case date",
+//                        selection: $caseLog.date,
+//                        displayedComponents: .date
+//                    )
+//                    .datePickerStyle(GraphicalDatePickerStyle())
+//
+//                    Text("Case Description")
+//                        .font(.headline)
+//                    TextEditor(text: $caseLog.description)
+//                        .frame(height: 150)
+//                        .border(Color.gray, width: 1)
+//                        .cornerRadius(5)
+//                }
+//                .padding()
+//            }
+//            .navigationTitle("Edit Case Log")
+//            .toolbar {
+//                ToolbarItem(placement: .cancellationAction) {
+//                    Button("Cancel") {
+//                        onCancel()
+//                    }
+//                }
+//                ToolbarItem(placement: .confirmationAction) {
+//                    Button("Save") {
+//                        onSave()
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
+
+//#Preview {
+//    CaseLogListView()
+//}
+
+
+
 
 
 
 struct CaseDetailView: View {
-    @State private var isShowingProtocol = false
-    @State private var showSheet = false
-    @State var caseLog: CaseLog
+    @EnvironmentObject var trainee: Trainee
+    @State private var showself_reflection = false
+    @State private var showSheetAction = false
+    @ObservedObject var caseLog: CaseLog
 
     var body: some View {
         ZStack {
@@ -216,18 +233,18 @@ struct CaseDetailView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    // Title
+                    // add the title here
                     Text(caseLog.title)
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
                     
-                    // Date
+                    // add the date here
                     Text(caseLog.date, style: .date)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
-                    // Description
+                    // we add the descripton here
                     Text(caseLog.description)
                         .font(.body)
                         .padding()
@@ -236,14 +253,12 @@ struct CaseDetailView: View {
                                 .fill(Color.white)
                                 .shadow(
                                     color: Color.gray.opacity(0.3),
-                                    radius: 10,
-                                    x: 0,
-                                    y: 5
+                                    radius: 10
                                 )
                         )
                     
 //                    Button(action: {
-//                        showSheet = true
+//                        showSheetAction = true
 //                    }) {
 //                        Text("Edit Log")
 //                            .font(.headline)
@@ -267,11 +282,11 @@ struct CaseDetailView: View {
 //                                y: 4
 //                            )
 //                    }
-//                    .sheet(isPresented: $showSheet) {
+//                    .sheet(isPresented: $showSheetAction) {
 //                        EditCaseLogView(caseLog: $caseLog) {
-//                            showSheet = false
+//                            showSheetAction = false
 //                        } onCancel: {
-//                            showSheet = false
+//                            showSheetAction = false
 //                        }
 //                    }
                     
@@ -279,7 +294,7 @@ struct CaseDetailView: View {
                     
                     // Self-reflection Button
                     Button(action: {
-                        isShowingProtocol = true
+                        showself_reflection = true
                     }) {
                         Text("Self Reflection")
                             .font(.headline)
@@ -298,13 +313,12 @@ struct CaseDetailView: View {
                             .cornerRadius(15)
                             .shadow(
                                 color: Color.orange.opacity(0.5),
-                                radius: 8,
-                                x: 0,
-                                y: 4
+                                radius: 8
                             )
                     }
-                    .sheet(isPresented: $isShowingProtocol) {
-                        SelfReflectionView()
+                    .sheet(isPresented: $showself_reflection) {
+                        SelfReflectionView(caseLog: caseLog, selfRef: caseLog.selfRef, showself_reflection: $showself_reflection)
+                            .environmentObject(trainee)
                     }
                 }
                 .padding()

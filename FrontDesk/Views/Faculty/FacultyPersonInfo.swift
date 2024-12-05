@@ -17,6 +17,44 @@ struct FacultyPersonInfo: View {
     @State private var team: String = ""
     @State private var gender: Gender = .Unknown
     @EnvironmentObject var faculty: Faculty
+    
+    @State var emptyName: Bool = false
+    @State var wrongName: Bool = false
+    @State var wrongEmail: Bool = false
+    
+    @State var showAlert: Bool = false
+    
+    @State var alertType: AlertType = .unknown
+    
+
+    private func checkName(str: String) {
+        let pattern = "(Dr\\. [a-zA-Z]*)|[a-zA-Z]*$"
+        let regex = try! NSRegularExpression(pattern: pattern)
+        let range = NSRange(location: 0, length: str.utf16.count)
+        let match = regex.firstMatch(in: str, options: [], range: range)
+        if match != nil && match?.range == range {
+            wrongName = false
+        } else {
+            wrongName = true
+        }
+    }
+
+    
+    private func checkEmail(str: String) {
+        if str.isEmpty {
+            wrongEmail = false
+            return
+        }
+        let pattern = "[A-Z0-9a-z._]+@[A-Za-z0-9.]+\\.[A-Za-z]{2,}$"
+        let regex = try! NSRegularExpression(pattern: pattern)
+        let range = NSRange(location: 0, length: str.utf16.count)
+        let match = regex.firstMatch(in: str, options: [], range: range)
+        if match != nil && match?.range == range {
+            wrongEmail = false
+        } else {
+            wrongEmail = true
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -40,35 +78,60 @@ struct FacultyPersonInfo: View {
                         )
                     )
                     .padding(.top, 30)
-                    .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 4)
+                    .shadow(color: Color.black.opacity(0.2), radius: 10)
 
                 Form {
                     // Personal Information Section
                     Section(header: CustomHeader(title: "Personal Information", icon: "person.crop.circle")) {
-                        CustomField(title: "First Name", text: $firstName, icon: "pencil.line", color: .blue)
-                        CustomField(title: "Last Name", text: $lastName, icon: "pencil.line", color: .blue)
-                    }
-
-                    // Details Section
-                    Section(header: CustomHeader(title: "Details", icon: "info.circle")) {
-                        CustomField(title: "From", text: $from, icon: "house", color: .green)
-                        CustomField(title: "Team", text: $team, icon: "person.3", color: .purple)
-
-                        VStack(alignment: .leading) {
-                            Text("Gender")
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                                .foregroundColor(.secondary)
-                            Picker("Gender", selection: $gender) {
-                                ForEach(Gender.allCases, id: \.self) {
-                                    Text($0.rawValue)
-                                }
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
+                        if wrongName {
+                            Text("First or last name in wrong format.")
+                                .foregroundStyle(.red)
+                                .padding()
                         }
+                        CustomField(title: "First Name", text: $faculty.fName, icon: "pencil.line", color: .blue)
+                            .onChange(of: faculty.fName) { ov, nv in
+                                checkName(str: nv)
+                            }
+                        CustomField(title: "Last Name", text: $faculty.lName, icon: "pencil.line", color: .blue)
+                            .onChange(of: faculty.lName) { ov, nv in
+                                checkName(str: nv)
+                            }
+                        if wrongEmail {
+                            Text("Email in wrong format.")
+                                .foregroundStyle(.red)
+                                .padding()
+                        }
+                        CustomField(title: "Email", text: $faculty.email, icon: "recordingtape", color: .blue)
+                            .onChange(of: faculty.email) { ov, nv in
+                                checkEmail(str: nv)
+                            }
                     }
 
-                    // Preferences Section
+//                    // Details Section
+//                    Section(header: CustomHeader(title: "Details", icon: "info.circle")) {
+//                        CustomField(title: "From", text: $from, icon: "house", color: .green)
+//                        CustomField(title: "Team", text: $team, icon: "person.3", color: .purple)
+//
+//                        VStack(alignment: .leading) {
+//                            Text("Gender")
+//                                .font(.subheadline)
+//                                .fontWeight(.bold)
+//                                .foregroundColor(.secondary)
+//                            Picker("Gender", selection: $gender) {
+//                                ForEach(Gender.allCases, id: \.self) {
+//                                    Text($0.rawValue)
+//                                }
+//                            }
+//                            .pickerStyle(SegmentedPickerStyle())
+//                        }
+//                    }
+                    
+//                    // Email Section
+//                    Section(header: CustomHeader(title: "Email", icon: "recordingtape")) {
+//
+//                    }
+
+                    // Next, we do the Preferences Section
                     Section {
                         NavigationLink(destination: PreferenceEdit().environmentObject(faculty)) {
                             HStack {
@@ -85,14 +148,26 @@ struct FacultyPersonInfo: View {
                 .background(
                     RoundedRectangle(cornerRadius: 15)
                         .fill(Color.white.opacity(0.8))
-                        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 4)
+                        .shadow(color: Color.black.opacity(0.1), radius: 10)
                 )
                 .padding()
             }
             .toolbar {
+                // we can save here and put the save button at the end of the toolbar
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Save") {
-                                    //TODO
+                                    if faculty.fName.isEmpty || faculty.lName.isEmpty{
+                                        alertType = .emptyNameAlert
+                                        showAlert = true
+                                    } else if wrongName == true {
+                                        alertType = .wrongNameAlert
+                                        showAlert = true
+                                    } else if wrongEmail == true {
+                                        alertType = .wrongEmailAlert
+                                        showAlert = true
+                                    } else {
+                                        upLoadFaculty(faculty)
+                                    }
                                 }
                                 .font(.headline)
                                 .fontWeight(.bold)
@@ -101,16 +176,29 @@ struct FacultyPersonInfo: View {
                         }
                     
         }
-        .onAppear {
-            self.firstName = "Dr. Emily"
-            self.lastName = "Clark"
-            self.from = "USA"
-            self.team = "Team A"
-            self.gender = .Female
+        .alert(isPresented: $showAlert) {
+            switch alertType {
+            case .emptyNameAlert:
+                return Alert(title: Text("First or last name can not be empty."))
+            case .wrongNameAlert:
+                return Alert(title: Text("First or last name in wrong format."))
+            case .wrongEmailAlert:
+                return Alert(title: Text("Email address in wrong format."))
+            case .unknown:
+                return Alert(title: Text("Unknown error."))
+            }
         }
+//        .onAppear {
+//            self.firstName = "Dr. Emily"
+//            self.lastName = "Clark"
+//            self.from = "USA"
+//            self.team = "Team A"
+//            self.gender = .Female
+//        }
     }
 }
 
+// make the user able to edit the information
 struct CustomField: View {
     let title: String
     @Binding var text: String

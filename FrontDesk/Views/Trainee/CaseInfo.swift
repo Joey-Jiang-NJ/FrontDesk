@@ -23,25 +23,28 @@ struct CaseInfoView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    // Header
+                    // header
                     Text("Case Information")
-                        .font(.system(size: 34, weight: .bold, design: .rounded))
+                    // we edit the font style here
+                        .font(.system(size: 34, weight: .bold))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding()
+                    // change the color of the area of the case information
                         .background(
                             LinearGradient(
-                                gradient: Gradient(colors: [Color.blue, Color.teal]),
+                                gradient: Gradient(colors: [Color.blue, Color.black]),
                                 startPoint: .leading,
                                 endPoint: .trailing
                             )
                         )
                         .cornerRadius(12)
-                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 4)
+                        .shadow(color: .black.opacity(0.2), radius: 5)
 
                     // Basic Info Section
                     SectionHeader(title: "Basic Info")
                     VStack(alignment: .leading, spacing: 15) {
+                        // assign different information to differnet label
                         InfoRow(label: "Case ID:", value: curCase.id)
                         InfoRow(label: "Case Type:", value: curCase.type)
                         InfoRow(label: "Patient Information:", value: curCase.patientInfo)
@@ -52,7 +55,7 @@ struct CaseInfoView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 12)
                             .fill(Color.white.opacity(0.9))
-                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 3)
+                            .shadow(color: Color.black.opacity(0.1), radius: 5)
                     )
                     .padding(.horizontal)
 
@@ -73,10 +76,10 @@ struct CaseInfoView: View {
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
                                         .fill(Color.white.opacity(0.9))
-                                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                                        .shadow(color: Color.black.opacity(0.1), radius: 5)
                                 )
                             }
-                            .buttonStyle(PlainButtonStyle())
+                         
                         }
                     }
                     .padding(.horizontal)
@@ -92,7 +95,7 @@ struct SectionHeader: View {
 
     var body: some View {
         Text(title)
-            .font(.system(size: 24, weight: .bold, design: .rounded))
+            .font(.system(size: 24, weight: .bold))
             .foregroundColor(.orange)
             .padding(.horizontal)
     }

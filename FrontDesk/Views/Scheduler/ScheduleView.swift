@@ -2,7 +2,7 @@
 //  ScheduleView.swift
 //  FrontDesk
 //
-//  Created by Martin Zuo on 11/25/24.
+//  Created by Martin Zuo on 11/15/24.
 //
 
 import SwiftUI
@@ -17,6 +17,8 @@ struct SchedulerView: View {
     }
     @State var selectedTraineeIDs: Set<String> = []
     @State var selectedTrainees: [Trainee] = []
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         ZStack {
@@ -35,7 +37,7 @@ struct SchedulerView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 12)
                             .fill(Color.white)
-                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                            .shadow(color: Color.black.opacity(0.1), radius: 5)
                     )
                     .padding(.horizontal)
 
@@ -48,12 +50,15 @@ struct SchedulerView: View {
                 // Trainee List
                 ScrollView {
                     VStack(spacing: 15) {
-                        ForEach(vacantTrainees, id: \.traineeID) { trainee in
-                            TraineeRowView(
-                                trainee: trainee,
-                                isSelected: selectedTraineeIDs.contains(trainee.traineeID),
-                                toggleSelection: toggleSelection
-                            )
+                        ForEach(vacantTrainees.sorted(by: {$0.evalScore > $1.evalScore}), id: \.traineeID) { trainee in
+                            // show all the trainee who is available
+                            if trainee.isAvailableForCase {
+                                TraineeRowView(
+                                    trainee: trainee,
+                                    isSelected: selectedTraineeIDs.contains(trainee.traineeID),
+                                    toggleSelection: toggleSelection
+                                )
+                            }
                         }
                     }
                     .padding(.horizontal)
@@ -61,40 +66,36 @@ struct SchedulerView: View {
 
                 // Save Button
                 Button {
-                    // TODO: Upload to server
+                    // here, we upload the information to the server
                     for t in selectedTrainees {
                         t.isAvailableForCase = false
                         t.caseID = curCase.id
-                        let t_: Trainee_ = traineeTrans2(t)
-                        updateCaseLog(serverURL: "http://localhost:8080/", trainee: t_) { result in
-                            switch result {
-                            case .success(let response):
-                                print("Update succeeded with status code: \(response.statusCode)")
-                            case .failure(let error):
-                                print("Update failed: \(error.localizedDescription)")
-                            }
-                        }
+                    }
+                    for t in selectedTrainees {
+                        upLoadTrainee(t)
                     }
                     
-                    var trainees: [Trainee_] = []
-                    let group = DispatchGroup()
-                    group.enter()
-                    fetchData(from: "http://localhost:8080/trainees") { (result: Result<[Trainee_], Error>) in
-                        DispatchQueue.main.async{
-                            switch result {
-                            case .success(let data):
-                                trainees = data
-                                self.data.traineeList = []
-                                for t in trainees{
-                                    self.data.traineeList.append(traineeTrans(t))
-                                }
-                            case .failure(let error):
-                                print("Error fetching cases:", error)
-                            }
-                            group.leave()
-                        }
+                    // MARK: This Error Handler comes from chatGpt
+//                    getAllTrainees()
+                    getAllTrainees { error in
+                        self.handleNetworkError(error)
+                    }
+                    // MARK: END
+                    
+                    for t in selectedTrainees {
+                        t.isAvailableForCase = false
+                        t.caseID = curCase.id
+                    }
+                    for t in selectedTrainees {
+                        upLoadTrainee(t)
                     }
                     
+//                    getAllTrainees()
+                    // MARK: This Error Handler comes from chatGpt
+                    getAllTrainees { error in
+                        self.handleNetworkError(error)
+                    }
+                    // MARK: END
                     
                 } label: {
                     Text("Save Selection")
@@ -110,7 +111,7 @@ struct SchedulerView: View {
                             )
                         )
                         .cornerRadius(12)
-                        .shadow(color: Color.orange.opacity(0.4), radius: 5, x: 0, y: 3)
+                        .shadow(color: Color.orange.opacity(0.4), radius: 5)
                 }
                 .padding(.horizontal)
                 .padding(.bottom, 20)
@@ -118,7 +119,7 @@ struct SchedulerView: View {
         }
         .navigationBarTitle("Select Trainee", displayMode: .inline)
     }
-
+    //MARK: We ask Chatgpt about this func
     private func toggleSelection(_ traineeID: String, _ trainee: Trainee) {
         if selectedTraineeIDs.contains(traineeID) {
             selectedTraineeIDs.remove(traineeID)
@@ -128,6 +129,26 @@ struct SchedulerView: View {
             selectedTrainees.append(trainee)
         }
     }
+    //MARK: END
+    
+    // MARK: This Error Handler comes from chatGpt
+    private func handleNetworkError(_ error: Error) {
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .notConnectedToInternet:
+                self.alertMessage = "No network connection, please check your network settings。"
+            case .timedOut:
+                self.alertMessage = "Request timed out, please try again later."
+            default:
+                self.alertMessage = "Could not connect to the server, please try again later."
+            }
+        } else {
+            self.alertMessage = "An unknown error has occurred：\(error.localizedDescription)"
+        }
+        self.showAlert = true
+    }
+    
+    // MARK: END
 }
 
 struct TraineeRowView: View {
@@ -137,56 +158,22 @@ struct TraineeRowView: View {
 
     var body: some View {
         HStack {
-            if trainee.traineeID.lowercased() == "076eee0e-04bf-413a-8dc1-5a52ed8ee7b7" {
-                Image("head")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    .shadow(radius: 3)
-            } else if trainee.firstName == "Sarah" {
-                Image("head1")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    .shadow(radius: 3)
-                    .frame(width: 80, height: 80)
-            } else if trainee.firstName == "Michael" {
-                Image("head2")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    .shadow(radius: 3)
-            } else if trainee.firstName == "Emily" {
-                Image("head3")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    .shadow(radius: 3)
-            } else if trainee.lastName == "Brown" {
-                Image("head4")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                    .shadow(radius: 3)
-            } else {
+            if !trainee.picture.isEmpty {
                 Image(uiImage: imageFromString(trainee.picture))
-                                   .resizable()
-                                   .scaledToFill()
-                                   .frame(width: 50, height: 50)
-                                   .clipShape(Circle())
-                                   .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                                   .shadow(radius: 3)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray))
+            } else {
+                Image("Elaina")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray))
             }
+            
             VStack(alignment: .leading, spacing: 5) {
                 Text("\(trainee.firstName) \(trainee.lastName)")
                     .font(.headline)
@@ -208,11 +195,13 @@ struct TraineeRowView: View {
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(isSelected ? Color.blue.opacity(0.2) : Color.white)
-                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                .shadow(color: Color.black.opacity(0.1), radius: 5)
         )
+        //MARK: From GPT
         .onTapGesture {
             toggleSelection(trainee.traineeID, trainee)
         }
+        //MARK: END
     }
 }
 

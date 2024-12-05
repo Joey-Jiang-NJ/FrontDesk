@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import SwiftData
-
 
 class Case: ObservableObject, Identifiable {
     @Published var id: String = ""
@@ -21,6 +19,8 @@ class Case: ObservableObject, Identifiable {
     @Published var traineeList: [Trainee] = []
     
     init(){}
+    
+    static var activeCase = Case()
     
     static var defaultCase =  Case(
         id: "###",

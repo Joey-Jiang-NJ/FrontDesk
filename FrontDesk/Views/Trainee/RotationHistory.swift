@@ -15,55 +15,73 @@ struct RotationHistoryView: View {
     
     var body: some View {
         ZStack {
-                   // Background Image
-                   Image("dukehealth")
-                       .resizable()
-                       .edgesIgnoringSafeArea(.all).opacity(0.62)
+            // Background Image
+            Image("dukehealth")
+                .resizable()
+                .ignoresSafeArea()
+                .opacity(0.62)
             VStack(alignment: .leading,spacing: 10) {
                 HStack(spacing: 30){
                     VStack {
+                        // add the image of the people to the top left of the page
                         Image(uiImage: imageFromString(trainee.picture))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 80, height: 80)
                             .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-                        Text("\(trainee.firstName) \(trainee.lastName)").font(.custom("LilyScriptOne-Regular", size: 20))
+                            .overlay(Circle().stroke(Color.gray))
+                        Text("\(trainee.firstName) \(trainee.lastName)")
+                            .font(.custom("LilyScriptOne-Regular", size: 20))
                         
                     }
+                    // begin the rotation summary and change the font to make it fancy
                     Text("Rotations Summaries")
                         .font(.custom("LilyScriptOne-Regular", size: 30))
                 }.padding()
+                
                 HStack{
                     Image(systemName: "clock.fill")
                         .foregroundStyle(Color.green)
                     Text("Active Rotation Summaries")
                         .font(.custom("LilyScriptOne-Regular", size: 25))
                 }.padding()
-                
+                //MARK: We learn grid from gpt
+                // use the grid to make the page more readable
                 Grid {
                     GridRow {
-                        Text("Rotation").font(.custom("Orbitron-Bold", size: 15)).fontWeight(.bold)
+                        Text("Rotation")
+                            .font(.custom("Orbitron-Bold", size: 15))
+                            .fontWeight(.bold)
                         Spacer()
-                        Text(curRotation.rotationName).font(.custom("PlaywriteAUTAS-Regular", size: 15))
+                        Text(curRotation.rotationName)
+                            .font(.custom("PlaywriteAUTAS-Regular", size: 15))
                     }
                     
                     GridRow {
-                        Text("Director").font(.custom("Orbitron-Bold", size: 15)).fontWeight(.bold)
+                        Text("Director")
+                            .font(.custom("Orbitron-Bold", size: 15))
+                            .fontWeight(.bold)
                         Spacer()
-                        Text(curRotation.facultyName).font(.custom("PlaywriteAUTAS-Regular", size: 15))
+                        Text(curRotation.facultyName)
+                            .font(.custom("PlaywriteAUTAS-Regular", size: 15))
                     }
                     
                     GridRow {
-                        Text("Start Date").font(.custom("Orbitron-Bold", size: 15)).fontWeight(.bold)
+                        Text("Start Date")
+                            .font(.custom("Orbitron-Bold", size: 15))
+                            .fontWeight(.bold)
                         Spacer()
-                        Text(curRotation.startDate).font(.custom("PlaywriteAUTAS-Regular", size: 15))
+                        Text(curRotation.startDate)
+                            .font(.custom("PlaywriteAUTAS-Regular", size: 15))
                     }
                     
                     GridRow {
-                        Text("End Date").font(.custom("Orbitron-Bold", size: 15)).fontWeight(.bold)
+                        Text("End Date")
+                            .font(.custom("Orbitron-Bold", size: 15))
+                            .fontWeight(.bold)
                         Spacer()
-                        Text(curRotation.endDate).font(.custom("PlaywriteAUTAS-Regular", size: 15))
+                        Text(curRotation.endDate)
+                            .font(.custom("PlaywriteAUTAS-Regular", size: 15))
                     }
                     Divider()
                 }
@@ -79,27 +97,59 @@ struct RotationHistoryView: View {
                     Grid {
                         ForEach(pastRotations){ rotation in
                             GridRow {
-                                Text("Rotation").font(.custom("Orbitron-Bold", size: 15)).fontWeight(.bold)
+                                Text("Rotation")
+                                    .font(.custom("Orbitron-Bold", size: 15))
+                                    .fontWeight(.bold)
                                 Spacer()
-                                Text(rotation.rotationName).font(.custom("PlaywriteAUTAS-Regular", size: 15))
+                                Text(rotation.rotationName)
+                                    .font(
+                                        .custom(
+                                            "PlaywriteAUTAS-Regular",
+                                            size: 15
+                                        )
+                                    )
                             }
                             
                             GridRow {
-                                Text("Director").font(.custom("Orbitron-Bold", size: 15)).fontWeight(.bold)
+                                Text("Director")
+                                    .font(.custom("Orbitron-Bold", size: 15))
+                                    .fontWeight(.bold)
                                 Spacer()
-                                Text(rotation.facultyName).font(.custom("PlaywriteAUTAS-Regular", size: 15))
+                                Text(rotation.facultyName)
+                                    .font(
+                                        .custom(
+                                            "PlaywriteAUTAS-Regular",
+                                            size: 15
+                                        )
+                                    )
                             }
                             
                             GridRow {
-                                Text("Start Date").font(.custom("Orbitron-Bold", size: 15)).fontWeight(.bold)
+                                Text("Start Date")
+                                    .font(.custom("Orbitron-Bold", size: 15))
+                                    .fontWeight(.bold)
                                 Spacer()
-                                Text(rotation.startDate).font(.custom("PlaywriteAUTAS-Regular", size: 15))
+                                Text(rotation.startDate)
+                                    .font(
+                                        .custom(
+                                            "PlaywriteAUTAS-Regular",
+                                            size: 15
+                                        )
+                                    )
                             }
                             
                             GridRow {
-                                Text("End Date").font(.custom("Orbitron-Bold", size: 15)).fontWeight(.bold)
+                                Text("End Date")
+                                    .font(.custom("Orbitron-Bold", size: 15))
+                                    .fontWeight(.bold)
                                 Spacer()
-                                Text(rotation.endDate).font(.custom("PlaywriteAUTAS-Regular", size: 15))
+                                Text(rotation.endDate)
+                                    .font(
+                                        .custom(
+                                            "PlaywriteAUTAS-Regular",
+                                            size: 15
+                                        )
+                                    )
                             }
                             Divider()
                         }
