@@ -69,4 +69,7 @@ The Scheduler interface features two tab views, allowing the scheduler to manage
    - The trainee gains access to the relevant case details.
    - Faculty associated with the case can view the list of all assigned trainees.
    
-Access to backend repo: https://gitlab.oit.duke.edu/zj96/frontdesk_server
+
+Access to backend repo(github): https://github.com/Joey-Jiang-NJ/FrontDesk_server
+
+Access to backend repo(gitlab): https://gitlab.oit.duke.edu/zj96/frontdesk_server
